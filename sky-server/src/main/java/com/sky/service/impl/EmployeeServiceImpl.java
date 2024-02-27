@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
@@ -78,11 +79,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setStatus(StatusConstant.ENABLE);
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
 
-        employee.setCreateTime(LocalDateTime.now());
+/*        employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
         //TODO 需要使用用户名进行填充
         employee.setCreateUser(10L);
-        employee.setUpdateUser(10L);
+        employee.setUpdateUser(10L);*/
         employeeMapper.inssert(employee);
     }
 
@@ -118,4 +119,26 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeMapper.update(employee);
     }
 
+    /**
+     * 根据id查询用户信息
+     * @param id
+     * @return
+     */
+    @Override
+    public Employee getById(Long id) {
+        Employee employee=employeeMapper.getById(id);
+        employee.setPassword("********");
+        return employee;
+    }
+
+    /**
+     *编写更新
+     * @param employeeDTO
+     */
+    @Override
+    public void update(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO,employee);
+        employeeMapper.update(employee);
+    }
 }
